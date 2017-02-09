@@ -311,9 +311,16 @@ def get_config(is_local):
     else:
         level = logging.INFO
     verbose = config['verbose']
-    logging.basicConfig(level=level,
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    datefmt = '%Y-%m-%d %H:%M:%S'
+    fmt = '[%(asctime)s.%(msecs)03d] [%(levelname)s] [%(thread)x] %(message)s'
+
+    if config['verbose'] == 1:  # debug mode
+        fmt = '[%(asctime)s.%(msecs)03d] [%(levelname)s]' \
+                ' [%(thread)x] [%(filename)s:%(lineno)d] %(message)s'
+
+    logging.basicConfig(level=level, datefmt=datefmt, format=fmt)
+
 
     check_config(config, is_local)
 
